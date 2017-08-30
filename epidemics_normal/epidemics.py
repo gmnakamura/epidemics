@@ -36,6 +36,8 @@ def update(current,transition,alpha,gamma):
 def count(current):
     return np.sum([int(current[k]) for k in range(len(current)) ])
 
+
+
 if __name__== '__main__':
     t0=time.time()
     n=100
@@ -43,8 +45,8 @@ if __name__== '__main__':
     #
     #it is convenient to hold alpha fixed and change gamma as desired
     #
-    alpha=0.5/(n*n) #alpha maximo < 4/n*n para gamma=0
-    gamma=1/n       #gamma maximo < 2/n   para alpha=0
+    alpha=1.0/(n*n) #alpha maximo < 4/n*n para gamma=0
+    gamma=0.3/n       #gamma maximo < 2/n   para alpha=0
     transition={'0':('0',0),'1':('0',1),
                 '00':('00',0),'01':('01',0),
                 '10':('11',1),'11':('11',0)}
