@@ -11,14 +11,11 @@ def update(current,transition,alpha,gamma):
     trial = np.random.rand()
     n=len(current)
     val=0
-    new = [current[k] for k in range(n)]
-    
+    new = [current[k] for k in range(n)]    
     for k in range(n):
         change=transition[current[k]]
         val+= gamma*change[1]
         if trial < val: 
-
-            if val> 1 : print(val)
             new[k]=change[0]
             return ''.join(new)
     for i in range(n):
@@ -26,8 +23,6 @@ def update(current,transition,alpha,gamma):
             change=transition[current[i]+current[j]]
             val+= alpha*change[1]
             if trial < val:                 
-
-                if val> 1 : print(val)
                 new[i]=change[0][0]
                 new[j]=change[0][1]
                 return ''.join(new)
@@ -40,7 +35,7 @@ def count(current):
 
 if __name__== '__main__':
     t0=time.time()
-    n=100
+    n=200
     num_averages=10
     #
     #it is convenient to hold alpha fixed and change gamma as desired
