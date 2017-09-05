@@ -36,8 +36,6 @@ def update(current,transition,adjacency):
 def count(current):
     return np.sum([int(current[k]) for k in range(len(current)) ])
 
-
-
 if __name__== '__main__':
     num_averages=100
 
