@@ -2,7 +2,7 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
-def update(current,transition,alpha,gamma):
+def update(current,transition,adjacency):
     """
     Update the current configuration using
     the standard transition matrix.
@@ -20,8 +20,13 @@ def update(current,transition,alpha,gamma):
             return ''.join(new)
     for i in range(n):
         for j in range(n):
-            change=transition[current[i]+current[j]]
-            val+= change[1]
+            change=transition[current[i]+current[j]] # string operation
+            val+= change[1]*adjacency[i][j] # multiply by adj matrix
+            #
+            # note: numpy uses row major. In the line above, we
+            #       should use adjacency[j][i]. However, we make
+            #       use of the symmetry of adj. matrix
+            #
             if trial < val:                 
                 new[i]=change[0][0]
                 new[j]=change[0][1]
@@ -41,9 +46,9 @@ if __name__== '__main__':
     #
     #it is convenient to hold alpha fixed and change gamma as desired
     #
-    alpha=1.0/(N*N) #alpha maximo < 4/n*n para gamma=0
-    gamma=0.3/N       #gamma maximo < 2/n   para alpha=0
+    gamma=0.3/N         #gamma maximo < 2/n   para alpha=0
     gamma_bar=1.0/(N*N)
+    alpha=1.0/(N*N)     #alpha maximo < 4/n*n para gamma=0
     transition={'0':('1',gamma_bar),'1':('0',gamma),
                 '00':('00',0),'01':('01',0),
                 '10':('11',alpha),'11':('11',0)}
@@ -56,13 +61,18 @@ if __name__== '__main__':
     #      1/mag-1 = exp(-alpha*n*t)
     #      using any initial config with n/2 infected
 
+    #
+    # build adjacency matrix
+    #
+    p=0.5 # complete graph :: p =1
+    A=(np.random.rand(N*N) < p).reshape((N,N))
+
 
     kmax=N*20
     mag=np.zeros(kmax)
     std=np.zeros(kmax)    
     run=0
     while run < num_averages:
-        #t0=time.time()
         run+=1
         k=0
         #
@@ -72,17 +82,17 @@ if __name__== '__main__':
         while k < kmax:
             mag[k]+= count(current)*1.0/N
             std[k]+=(count(current)*1.0/N)**2
-            current=update(current,transition,alpha,gamma)        
+            current=update(current,transition,A)        
             k+=1
             #print(current)
 
     y=time.time()-t0
-
+    print('elapsed time:: %f' % y)
     mag=mag*1.0/num_averages
     std=np.sqrt((std*1.0/num_averages) - mag*mag)
 
 
-    with open('data_regular_N%d_gamma%f_runs%d.dat' % (N,gamma*N,num_averages),'w') as f:
+    with open('data_regular_N%d_gamma%f_gammab%f_p%f_runs%d.dat' % (N,gamma*N,gamma_bar*N*N,p,num_averages),'w') as f:
         for x,y,z in zip(np.arange(kmax),mag,std):
             f.write('%d %f %f\n' % (x,y,z))
 
