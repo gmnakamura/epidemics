@@ -59,6 +59,12 @@ def map_str2int(string):
     return reduce(lambda x,y: x+y, vec)
         
 #==================================================        
+def average(configs):
+    output=0
+    for config in configs:
+        output+= config.count('1') * configs[config]
+    return output
+#==================================================        
 
 
 
@@ -66,10 +72,10 @@ if __name__ == '__main__':
     #
     # parameter definition
     #
-    N = 10
+    N = 20
     gamma = 0.3/N
     alpha = 1.0/(N*N)
-    gamma_bar = 0.1/(N*N)
+    gamma_bar = 0#0.1/(N*N)
     
     params=(alpha,gamma,gamma_bar)
     transition={ '0':('1',gamma_bar),'1':('0',gamma),
@@ -79,15 +85,12 @@ if __name__ == '__main__':
     
     current={'1'*N:1}
     
-    kmax=N*20
+    kmax= N*20
     for k in range(kmax):
+        print(average(current)*1.0/N)
         current=update(current,transition,params); 
 
-    probs=np.zeros(2**N)
-    average = 0
-    for config in current:
-        index=map_str2int(config)
-        probs[index]=current[config]
-        average += probs[index]*config.count('1')
 
-    print(average)
+        
+
+
