@@ -1,5 +1,5 @@
 import numpy as np
-
+from functools import reduce
 
 
 
@@ -52,8 +52,11 @@ def apply_transition_matrix(config,transition,params):
                  
     return new
 
-
-
+#==================================================        
+def map_str2int(string):
+    n   = len(string)
+    vec = [ int(string[k])*(2**k) for k in range(n) ]
+    return reduce(lambda x,y: x+y, vec)
         
 #==================================================        
 
@@ -63,7 +66,7 @@ if __name__ == '__main__':
     #
     # parameter definition
     #
-    N = 4
+    N = 10
     gamma = 0.3/N
     alpha = 1.0/(N*N)
     gamma_bar = 0.1/(N*N)
@@ -74,6 +77,17 @@ if __name__ == '__main__':
                  '10':('11',alpha),'01':(None,0) }
     
     
-    current={'1111':1}
-    current=update(current,transition,params); print(sum(current.values()))
+    current={'1'*N:1}
+    
+    kmax=N*20
+    for k in range(kmax):
+        current=update(current,transition,params); 
 
+    probs=np.zeros(2**N)
+    average = 0
+    for config in current:
+        index=map_str2int(config)
+        probs[index]=current[config]
+        average += probs[index]*config.count('1')
+
+    print(average)
