@@ -40,12 +40,12 @@ if __name__== '__main__':
     num_averages=100
 
     t0=time.time()
-    N=20
+    N=10
     #
     #it is convenient to hold alpha fixed and change gamma as desired
     #
     gamma=0.3/N         #gamma maximo < 2/n   para alpha=0
-    gamma_bar=1.0/(N*N)
+    gamma_bar=0#0.1/(N*N)
     alpha=1.0/(N*N)     #alpha maximo < 4/n*n para gamma=0
     transition={'0':('1',gamma_bar),'1':('0',gamma),
                 '00':('00',0),'01':('01',0),
@@ -62,11 +62,11 @@ if __name__== '__main__':
     #
     # build adjacency matrix
     #
-    p=0.5 # complete graph :: p =1
+    p=1 # complete graph :: p =1
     A=(np.random.rand(N*N) < p).reshape((N,N))
 
 
-    kmax=N*20
+    kmax=N*50
     mag=np.zeros(kmax)
     std=np.zeros(kmax)    
     run=0
