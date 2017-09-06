@@ -1,8 +1,6 @@
 import numpy as np
 from functools import reduce
 
-
-
 def update(configs,params,N):
     final={}
     for config in configs:
@@ -20,7 +18,7 @@ def apply_transition_matrix(m,params,N):
     #
     # we only consider sector N/2
     #
-    s=N/2 
+    s=N*1.0/2 
     out_configs={}
     out_configs[m]=1.0-params[0]*(0.25*N*N-m*m)-(params[1]-params[2])*(m+0.5*N)-params[2]*N
     if m > -s:
@@ -39,7 +37,7 @@ def compute_basis(N):
     #
     def ladder_up(string,N):
         out={}
-        for k in range(N):
+        for k in xrange(N):
             if string[k]=='0':
                 new = string[:k]+'1'+string[k:][1:]
                 out[new]=1
@@ -88,8 +86,8 @@ if __name__ == '__main__':
     
 
     gamma = 0.3/N
-    alpha = random_network_prob/(N*N)
-    gamma_bar = 0#0.1/(N*N)
+    alpha = random_network_prob*1.0/(N*N)
+    gamma_bar = 0.1/(N*N)
     
     params=(alpha,gamma,gamma_bar)
     # transition={ '0':('1',gamma_bar),'1':('0',gamma),
@@ -102,7 +100,7 @@ if __name__ == '__main__':
     p,basis=likelihood(current,N)
 
     kmax= N*20
-    for k in range(kmax):
+    for k in xrange(kmax):
     #     print(average(current)*1.0/N)
         current=update(current,params,N); 
         p,_=likelihood(current,N,basis)
