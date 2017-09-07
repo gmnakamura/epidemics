@@ -15,12 +15,12 @@ def markov(current,params=None,steps=None):
     current={(entry.count('1')/2.0):current[entry] for entry in current}
     #current={N/2:1} # initial conf == everyone infected
     p,basis=likelihood(current,N)
-    kmax= N*20
+    avg=np.zeros(steps)
     for k in range(steps):
-        current=update(current,params,N); 
-    p,_=likelihood(current,N,basis)
-    n,_=average(current,N,basis)
-    avg=np.sum(n)*1.0/N
+        current=update(current,params,N);
+        n,_=average(current,N,basis)
+        avg[k]=np.sum(n)*1.0/N
+    p,_=likelihood(current,N,basis)    
     return (avg,p)
 #==================================================
 def update(configs,params,N):

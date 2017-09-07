@@ -2,18 +2,18 @@ import sys
 sys.path.append("..")
 from timeit import default_timer as timer
 import numpy as np
-import markov
-import markov_sym
+import montecarlo
+import montecarlo_sym
 
 num_samples=30
-nmin=4
-nmax=8
-nlist=range(nmin,nmax+1,2)
+nmin=10
+nmax=100
+nlist=range(nmin,nmax+1,10)
 ns=len(nlist)
 
 print(u"""
 ===============================================================
-experiment 1:: performance evaluation of markov implementations
+experiment 2:: performance evaluation of markov implementations
 """)
 print(u""" average calculated using %d samples
 """ %num_samples)
@@ -25,7 +25,7 @@ for N in nlist:
     perf = np.zeros(num_samples)
     for sample in range(num_samples):
         start=timer()
-        _,_  =markov.markov({'1'*N:1})
+        _,_  =montecarlo.montecarlo('1'*N)
         end  =timer()
         perf[sample]=end-start
     avg[N]=np.mean(perf)
@@ -39,13 +39,13 @@ for N in nlist:
     perf = np.zeros(num_samples)
     for sample in range(num_samples):
         start=timer()
-        _,_  =markov_sym.markov({'1'*N:1})
+        _,_  =montecarlo_sym.montecarlo('1'*N)
         end  =timer()
         perf[sample]=end-start
     avg1[N]=np.mean(perf)
     std1[N]=np.sqrt(np.var(perf))    
     print(u"""... done. Elapsed time =%f +- %f""" %(avg1[N],1.96*std1[N]))
 
-with open('output_exp1_markov.dat','w') as f:
+with open('output_exp2_montecarlo.dat','w') as f:
     for N in nlist:
         f.write('%d %f %f %f %f\n' % (N,avg[N],std[N],avg1[N],std1[N]))

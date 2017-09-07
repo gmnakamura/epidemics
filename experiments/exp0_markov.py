@@ -24,4 +24,4 @@ for entry in p0:
     print(entry,p0[entry],ps[entry])
 print(u"""
 n(regular  )/N = %f
-n(symmetryc)/N = %f""" % (n0,ns))
+n(symmetryc)/N = %f""" % (n0[-1],ns[-1]))

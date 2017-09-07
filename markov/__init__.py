@@ -14,9 +14,11 @@ def markov(current,params=None,steps=None):
     transition={ '0':('1',params[2]),'1':('0',params[1]),
                  '00':(None,0),'11':(None,0),
                  '10':('11',params[0]*params[3]),'01':(None,0) }
+    avg=np.zeros(steps)
     for k in range(steps):
-        current=update(current,transition,params);    
-    return (average(current)*1.0/N , current)
+        current=update(current,transition,params);
+        avg[k]= average(current)*1.0/N
+    return ( avg , current)
 #==================================================
 def update(configs,transition,params):
     final={}
