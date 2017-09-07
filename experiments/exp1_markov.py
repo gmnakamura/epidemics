@@ -8,6 +8,8 @@ import markov_sym
 num_samples=30
 nmin=4
 nmax=8
+nlist=range(nmin,nmax+1)
+ns=len(nlist)
 
 print(u"""experiment 1:: performance evaluation of markov implementations
 
@@ -15,7 +17,9 @@ print(u"""experiment 1:: performance evaluation of markov implementations
 print(u""" average calculated using %d samples
 """ %num_samples)
 print(u""" non-symmetric implementation""")
-for N in range(nmin,nmax+1,2):
+avg={}
+std={}
+for N in nlist:
     print('   ... N=%d'%N)
     perf = np.zeros(num_samples)
     for sample in range(num_samples):
@@ -23,12 +27,14 @@ for N in range(nmin,nmax+1,2):
         n,p  =markov.markov({'1'*N:1})
         end  =timer()
         perf[sample]=end-start
-    avg=np.mean(perf)
-    std=np.sqrt(np.var(perf))    
+    avg[N]=np.mean(perf)
+    std[N]=np.sqrt(np.var(perf))    
 print(u"""... done. Elapsed time =%f +- %f
 """ %(avg,1.96*std))
 print(u"""     symmetric implementation""")
-for N in range(nmin,nmax+1,2):
+avg1={}
+std1={}
+for N in nlist:
     print('   ... N=%d'%N)
     perf = np.zeros(num_samples)
     for sample in range(num_samples):
@@ -36,7 +42,11 @@ for N in range(nmin,nmax+1,2):
         n,p  =markov_sym.markov({'1'*N:1})
         end  =timer()
         perf[sample]=end-start
-    avg=np.mean(perf)
-    std=np.sqrt(np.var(perf))    
+    avg1[N]=np.mean(perf)
+    std1[N]=np.sqrt(np.var(perf))    
 print(u"""... done. Elapsed time =%f +- %f
 """ %(avg,1.96*std))
+
+with open('exp1_markov.dat','w') as f:
+    for N in nlist:
+        f.write('%d %f %f %f %f' % (N,avg[N],std[N],avg1[N],std1[N]))
