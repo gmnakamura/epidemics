@@ -7,7 +7,7 @@ import markov_sym
 
 num_samples=30
 nmin=4
-nmax=8
+nmax=10
 nlist=range(nmin,nmax+1,2)
 ns=len(nlist)
 

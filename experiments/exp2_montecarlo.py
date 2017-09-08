@@ -7,13 +7,13 @@ import montecarlo_sym
 
 num_samples=30
 nmin=10
-nmax=100
-nlist=range(nmin,nmax+1,10)
+nmax=20
+nlist=range(nmin,nmax+1,2)
 ns=len(nlist)
 
 print(u"""
 ===============================================================
-experiment 2:: performance evaluation of markov implementations
+experiment 2:: performance evaluation of montecarlo implementations
 """)
 print(u""" average calculated using %d samples
 """ %num_samples)

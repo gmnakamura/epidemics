@@ -20,9 +20,9 @@ std={}
 prob={}
 
 print('... mc:')
-avg['mc'],std['mc']=montecarlo.montecarlo('1'*N,steps=steps)
+avg['mc'],std['mc']=montecarlo.montecarlo('1'*N,steps=steps,num_averages=10000)
 print('... mc-sym:')
-avg['mc-sym'],std['mc-sym']=montecarlo_sym.montecarlo('1'*N,steps=steps)
+avg['mc-sym'],std['mc-sym']=montecarlo_sym.montecarlo('1'*N,steps=steps,num_averages=10000)
 print('... markov:')
 avg['markov'],prob['markov']=markov.markov({'1'*N:1},steps=steps)
 print('... markov-sym:')

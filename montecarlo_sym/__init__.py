@@ -9,9 +9,6 @@ def montecarlo(string='1111',params=None,steps=None,num_averages=100):
         params=(1.0/(N*N),0.3/N,0.1/(N*N),1.0)
     if steps is None:
         steps=20*N
-    alpha=params[0]*params[3]
-    gamma=params[1]
-    gamma_bar=params[2]    
     mag=np.zeros(steps)
     std=np.zeros(steps)
     run=0
@@ -26,21 +23,21 @@ def montecarlo(string='1111',params=None,steps=None,num_averages=100):
         while k < steps:
             mag[k]+= current*1.0/N+0.5
             std[k]+=(current*1.0/N+0.5)**2.0
-            current=update(current,S,N,alpha,gamma)
+            current=update(current,S,N,params)
             k+=1
     mag=mag*1.0/(num_averages)
     std=np.sqrt((std*1.0/num_averages) - mag*mag)
     return (mag,std)
 #=================================================
-def update(m,s,N,alpha,gamma):
+def update(m,s,N,params):
     n=N*0.5+m
     up  =int(s*(s+1)-m*(m+1) > 0)
     down=int(s*(s+1)-m*(m-1) > 0)
-    p_up=up*alpha*n*(N-n)
-    p_down=down*gamma*n
-    p_stay=1-alpha*(N-n)*n-gamma*n
-    Z=p_up+p_down+p_stay
-    intervals=np.array([p_down,p_stay+p_down, Z ])/Z
+    
+    p_up=up*(N-n)*(n*params[0]*params[3]+params[2])
+    p_down=down*n*params[1]
+    p_stay=1-p_up-p_down
+    intervals=np.array([p_down,p_stay+p_down, 1.0 ])
     trial = np.argmax(np.random.rand() < intervals)
     return int(trial-1)+m
 #=================================================
@@ -58,9 +55,12 @@ if __name__== '__main__':
     for i in range(len(N_list)):        
         t0=time.time()
         N=N_list[i]
-        alpha=1/(N*N)
+        alpha=1.0/(N*N)
         gamma=0.3/N
-
+        alpha_bar=0.1/(N*N)
+        prob_net=1.0
+        
+        params=(alpha,gamma,gamma_bar,prob_net)
 
         S = N/2.0
         kmax= N*20
@@ -78,7 +78,7 @@ if __name__== '__main__':
             while k < kmax:
                 mag[k]+= current*1.0/N+0.5
                 std[k]+=(current*1.0/N+0.5)**2.0
-                current=update(current,S,N,alpha,gamma)
+                current=update(current,S,N,params)
                 k+=1
         y=time.time()-t0
         avgtime[i]+=y
