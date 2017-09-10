@@ -92,36 +92,21 @@ def likelihood(current,N,basis=None):
 
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    from timeit import default_timer as timer
     #
     # parameter definition
     #
-    N = 10
-    random_network_prob=1.0
-    
+    N = 12
 
-    gamma = 0.3/N
-    alpha = random_network_prob/(N*N)
-    gamma_bar = 0#0.1/(N*N)
+    current={'1'*N:1} # initial conf == everyone infected
     
-    params=(alpha,gamma,gamma_bar)
-    # transition={ '0':('1',gamma_bar),'1':('0',gamma),
-    #              '00':(None,0),'11':(None,0),
-    #              '10':('11',alpha),'01':(None,0) }
-    
-    
-    current={N/2:1} # initial conf == everyone infected
-    
-    p,basis=likelihood(current,N)
+    start   = timer()
+    avg,p   = markov(current)
+    elapsed = timer() - start
+    print('elapsed time :: %f' % elapsed)
+    plt.plot(avg) ; plt.show()
 
-    kmax= N*20
-    for k in range(kmax):
-    #     print(average(current)*1.0/N)
-        current=update(current,params,N); 
-        p,_=likelihood(current,N,basis)
-        #ptot=sum(list(p.values()))
-        n,_ =average(current,N,basis)
-        avg =np.sum(n)*1.0/N
-        #print("probtot=%f , average=%f" %(ptot,avg))
         
 
 

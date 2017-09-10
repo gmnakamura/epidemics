@@ -78,22 +78,37 @@ def average(configs):
 
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    from timeit import default_timer as timer
     #
     # parameter definition
     #
-    N = 20
-    gamma = 0.3/N
-    alpha = 1.0/(N*N)
-    gamma_bar = 0#0.1/(N*N)    
-    params=(alpha,gamma,gamma_bar)
-    transition={ '0':('1',gamma_bar),'1':('0',gamma),
-                 '00':(None,0),'11':(None,0),
-                 '10':('11',alpha),'01':(None,0) }        
-    current={'1'*N:1}    
-    kmax= N*20
-    for k in range(kmax):
-        print(average(current)*1.0/N)
-        current=update(current,transition,params); 
+    N = 12
+
+
+    current={'1'*N:1} # initial conf == everyone infected
+    
+    start   = timer()
+    avg,p   = markov(current)
+    elapsed = timer() - start
+    print('elapsed time :: %f' % elapsed)
+    plt.plot(avg) ; plt.show()
+
+
+
+    
+    # gamma = 0.3/N
+    # alpha = 1.0/(N*N)
+    # gamma_bar = 0#0.1/(N*N)    
+    # params=(alpha,gamma,gamma_bar)
+    # transition={ '0':('1',gamma_bar),'1':('0',gamma),
+    #              '00':(None,0),'11':(None,0),
+    #              '10':('11',alpha),'01':(None,0) }        
+    # current={'1'*N:1}    
+    # kmax= N*20
+    # for k in range(kmax):
+    #     print(average(current)*1.0/N)
+    #     current=update(current,transition,params); 
 
 
         

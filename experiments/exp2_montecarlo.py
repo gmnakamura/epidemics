@@ -6,7 +6,7 @@ import montecarlo
 import montecarlo_sym
 
 num_samples=30
-nmin=10
+nmin=4 
 nmax=20
 nlist=range(nmin,nmax+1,2)
 ns=len(nlist)

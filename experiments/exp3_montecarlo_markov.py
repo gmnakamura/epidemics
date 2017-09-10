@@ -7,7 +7,7 @@ import markov
 import markov_sym
 
 
-N=10
+N=16
 steps=20*N
 
 print(u"""
