@@ -13,7 +13,7 @@ def montecarlo(current,params=None,steps=None,num_averages=100):
         steps=N*20        
     transition={'0':('1',params[2]),'1':('0',params[1]),
                 '00':('00',0),'01':('01',0),
-                '10':('11',params[0]),'11':('11',0)}
+                '10':('11',params[0]*params[3]),'11':('11',0)}
     #
     # build adjacency matrix
     #
@@ -25,10 +25,6 @@ def montecarlo(current,params=None,steps=None,num_averages=100):
         A=(np.random.rand(N*N) < params[3]).reshape((N,N))
         run+=1
         k=0
-        #
-        # initial config
-        #
-        current='1'*int(N) 
         while k < steps:
             mag[k]+= count(current)*1.0/N
             std[k]+=(count(current)*1.0/N)**2
